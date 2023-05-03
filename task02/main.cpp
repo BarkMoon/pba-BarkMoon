@@ -34,10 +34,10 @@ class Particle {
  * @param [in] ball_rad ball rad
  */
 void collide_particle_ball(
-    Particle& p,
+    Particle &p,
     float particle_mass,
-    Eigen::Vector2f& ball_pos,
-    Eigen::Vector2f& ball_velo,
+    Eigen::Vector2f &ball_pos,
+    Eigen::Vector2f &ball_velo,
     float ball_mass,
     float ball_rad) {
     if ((p.pos - ball_pos).norm() > ball_rad) { return; }
@@ -65,11 +65,11 @@ void collide_particle_ball(
     // solve: mv + MV = mv' + MV',  V - v = v' - V'
     // v' = {(m-M)v + 2MV} / (m + M), V' = {(M-m)V + 2mv} / (m + M)
     // v'-v = {2M/(m+M)} (V-v), V'-V = {2m/(m+M)} (v-V)
-    // impulse = m(v'-v) = -{2mM/(m+M)} (v-V)
+    // impulse = M(V'-V) = {2mM/(m+M)} (v-V)
 
-    const Eigen::Vector2f impulse = (-2.0f * particle_mass * ball_mass / (particle_mass + ball_mass)) * (p.velo - ball_velo);
-    p.velo += impulse / particle_mass;
-    ball_velo += -impulse / ball_mass;
+    const Eigen::Vector2f impulse = (2.0f * particle_mass * ball_mass / (particle_mass + ball_mass)) * (p.velo - ball_velo);
+    p.velo += -impulse / particle_mass;
+    ball_velo += impulse / ball_mass;
 }
 
 /**
