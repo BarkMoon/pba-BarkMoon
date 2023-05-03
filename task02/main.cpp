@@ -34,35 +34,42 @@ class Particle {
  * @param [in] ball_rad ball rad
  */
 void collide_particle_ball(
-    Particle &p,
+    Particle& p,
     float particle_mass,
-    Eigen::Vector2f &ball_pos,
-    Eigen::Vector2f &ball_velo,
+    Eigen::Vector2f& ball_pos,
+    Eigen::Vector2f& ball_velo,
     float ball_mass,
     float ball_rad) {
-  if ((p.pos - ball_pos).norm() > ball_rad) { return; }
-  const Eigen::Vector2f plane_norm = (p.pos - ball_pos).normalized();
-  const Eigen::Vector2f plane_org = ball_pos + plane_norm * ball_rad;
-  float height = (p.pos - plane_org).dot(plane_norm);
-  p.pos -= height * 2 * plane_norm;
+    if ((p.pos - ball_pos).norm() > ball_rad) { return; }
+    const Eigen::Vector2f plane_norm = (p.pos - ball_pos).normalized();
+    const Eigen::Vector2f plane_org = ball_pos + plane_norm * ball_rad;
+    float height = (p.pos - plane_org).dot(plane_norm);
+    p.pos -= height * 2 * plane_norm;
 
-  //--------------------------------------------------------------------- //
-  // ASSIGNMENT: implement the collision between ball and particle.
-  //             The coefficient of restitution is 1, e.g., the magnitude
-  //             of relative velocity does not change after the collision.
-  //             The linear momentum should be conserved.
-  //             The force between ball and particle should only in the normal
-  //             direction (e.g, `plane_norm`). In other words, there is
-  //             no friction. You do not need to change the positions.
+    //--------------------------------------------------------------------- //
+    // ASSIGNMENT: implement the collision between ball and particle.
+    //             The coefficient of restitution is 1, e.g., the magnitude
+    //             of relative velocity does not change after the collision.
+    //             The linear momentum should be conserved.
+    //             The force between ball and particle should only in the normal
+    //             direction (e.g, `plane_norm`). In other words, there is
+    //             no friction. You do not need to change the positions.
 
-  // comment out the line below
-  p.velo -= 2.f * (p.velo - ball_velo).dot(plane_norm) * plane_norm;
+    // comment out the line below
+    //p.velo -= 2.f * (p.velo - ball_velo).dot(plane_norm) * plane_norm;
 
-  // write a few lines of code to compute the velocity of ball and particle
-  // please uncomment the lines below
-  // const Eigen::Vector2f impulse =
-  // p.velo +=
-  // ball_velo +=
+    // write a few lines of code to compute the velocity of ball and particle
+    // please uncomment the lines below
+
+    // m = particle_mass, M = ball_mass, v = p.velo, V = ball_velo
+    // solve: mv + MV = mv' + MV',  V - v = v' - V'
+    // v' = {(m-M)v + 2MV} / (m + M), V' = {(M-m)V + 2mv} / (m + M)
+    // v'-v = {2M/(m+M)} (V-v), V'-V = {2m/(m+M)} (v-V)
+    // impulse = m(v'-v) = -{2mM/(m+M)} (v-V)
+
+    const Eigen::Vector2f impulse = (-2.0f * particle_mass * ball_mass / (particle_mass + ball_mass)) * (p.velo - ball_velo);
+    p.velo += impulse / particle_mass;
+    ball_velo += -impulse / ball_mass;
 }
 
 /**
