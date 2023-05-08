@@ -44,9 +44,9 @@ Record the computation time by filling the table below.
 
 | #particle | time |
 | --- | --- |
-| 5000 | ? |
+| 5000 | 3477575ms |
 | 10000 | ? |
-| 20000 | ? |
+| 20000 | 56339223ms |
 
 
 Take a screenshot image (it should look like image at the top) after 200 steps for the 20k particles. 
