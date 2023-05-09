@@ -45,7 +45,7 @@ Record the computation time by filling the table below.
 | #particle | time |
 | --- | --- |
 | 5000 | 3477575ms |
-| 10000 | ? |
+| 10000 | 14206408ms |
 | 20000 | 56339223ms |
 
 
