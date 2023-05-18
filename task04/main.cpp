@@ -120,9 +120,9 @@ void nearest_kdtree(
   const Eigen::Vector2f pos = nodes[idx_node].pos;
   if ((pos - pos_in).norm() < (pos_near - pos_in).norm()) { pos_near = pos; } // update the nearest position
 
-  // Firstly, compute the leaf node which pos_in belongs to.
-  // If the absolute value of the signed distance from pos_in to the current box is smaller than the distance to the leaf node,
-  // the nearest point may be in the other side of the child node of the current node.
+  // Firstly, compute the leaf node which pos_in belongs to, and set it to the nearest point.
+  // If the absolute value of the signed distance from pos_in to the current box is smaller than the distance to the current nearest point,
+  // the true nearest point may be in the other side of the child node of the current node.
 
   if (i_depth % 2 == 0) { // division in x direction
       if (pos_in.x() <= pos.x()) {
