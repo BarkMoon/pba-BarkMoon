@@ -52,7 +52,7 @@ void WdWddW_Spring3(
   // ddw[0][0] = k * u01 * u01^T + (1 / length) * I + (1 / length^3) * (p0-p1)(p0-p1)^T
   //           = n + (1 / length) * I + (1 / k / length) * n
   // dw[1] = -dw[0]より、ddw[1][0] = -ddw[0][0]
-  // p0-p1でなくp1-p0で微分することを考えると、ddw[0][1] = -ddw[0][0]
+  // p0-p1→p1-p0を考えると、ddw[0][1] = -ddw[0][0]
   // 同様に、ddw[1][1] = -ddw[0][1] = ddw[0][0]
   
   ddw[0][0] = n + (1 / length) * Eigen::Matrix3d::Identity() - (1 / stiffness / length) * n;
