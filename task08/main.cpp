@@ -85,9 +85,9 @@ void wdw_volume_tri_origin(
   w = 1./6.*node2xyz[0].dot(node2xyz[1].cross(node2xyz[2]));
   // ------------------------------
   // Write some code below to compute differentiation. Keep it simple and understandable
-  // dw[0] =
-  // dw[1] =
-  // dw[2] =
+  dw[0] = 1.0 / 6.0 * (node2xyz[1].cross(node2xyz[2]));
+  dw[1] = 1.0 / 6.0 * (node2xyz[2].cross(node2xyz[0]));
+  dw[2] = 1.0 / 6.0 * (node2xyz[0].cross(node2xyz[1]));
 }
 
 void inflate(
@@ -153,10 +153,18 @@ void inflate(
     for (unsigned int inode = 0; inode < 3; ++inode) {
       for (unsigned int idim = 0; idim < 3; ++idim) {
         // write some code including `dw` and `lambda`
+        
+        // subtract lambda * dg(derivation of constraint) from dW
+        dW(node2vtx[inode] * 3 + idim) -= lambda * dw[inode](idim);
+
+        // calculate the last row/column of ddW
+        ddW(node2vtx[inode] * 3 + idim, num_vtx * 3) -= dw[inode](idim);
+        ddW(num_vtx * 3, node2vtx[inode] * 3 + idim) -= dw[inode](idim);
       }
     }
   }
   // Do not forget to write one line of code here
+  dW(num_vtx * 3) = -(volume - volume_trg);  // calculate last element of dW
   // -------------------------------------------------
   // Do not change below
   // damping for stable convergence
@@ -199,7 +207,7 @@ int main() {
   const double volume_trg = volume_ini * 2.0;
   double lambda = 0.0;
 
-  for(unsigned int itr=0;itr<10;++itr){
+  for(unsigned int itr=0;itr<500;++itr){
     std::cout << "iteration: " << itr << std::endl;
     inflate(vtx2xyz, lambda, volume_trg, tri2vtx, line2vtx, vtx2xyz_ini);
   }
