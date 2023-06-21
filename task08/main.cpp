@@ -164,7 +164,7 @@ void inflate(
     }
   }
   // Do not forget to write one line of code here
-  dW(num_vtx * 3) = -(volume - volume_trg);  // calculate last element of dW
+  dW(num_vtx * 3) = -(volume - volume_trg);  // calculate the last element of dW
   // -------------------------------------------------
   // Do not change below
   // damping for stable convergence
